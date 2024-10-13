@@ -1,17 +1,17 @@
 package br.com.services;
 
-import br.com.model.Person;
+import br.com.data.vo.v1.PersonVO;
 import java.util.List;
 
 public interface PersonService {
 
-  Person findById(Long id);
+  PersonVO findById(Long id);
 
-  List<Person> findAll();
+  List<PersonVO> findAll();
 
-  Person create(Person person);
+  PersonVO create(PersonVO personVO);
 
-  Person update(Person person);
+  PersonVO update(PersonVO personVO);
 
   void delete(Long id);
 

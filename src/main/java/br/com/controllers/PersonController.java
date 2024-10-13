@@ -1,6 +1,6 @@
 package br.com.controllers;
 
-import br.com.model.Person;
+import br.com.data.vo.v1.PersonVO;
 import br.com.services.PersonService;
 import java.util.List;
 import org.springframework.http.MediaType;
@@ -25,25 +25,25 @@ public class PersonController {
   }
 
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Person findById(@PathVariable("id") Long id) {
+  public PersonVO findById(@PathVariable("id") Long id) {
     return this.personService.findById(id);
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<Person> findAll() {
+  public List<PersonVO> findAll() {
     return this.personService.findAll();
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public Person create(@RequestBody Person person) {
-    return this.personService.create(person);
+  public PersonVO create(@RequestBody PersonVO personVO) {
+    return this.personService.create(personVO);
   }
 
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public Person update(@RequestBody Person person) {
-    return this.personService.update(person);
+  public PersonVO update(@RequestBody PersonVO personVO) {
+    return this.personService.update(personVO);
   }
 
   @DeleteMapping(value = "/{id}")
