@@ -2,7 +2,7 @@ package br.com.services.impl;
 
 import br.com.data.vo.v1.PersonVO;
 import br.com.exceptions.ResourceNotFoundException;
-import br.com.mapper.DozerMapper;
+import br.com.mapper.ModelMapperUtil;
 import br.com.model.Person;
 import br.com.repository.PersonRepository;
 import br.com.services.PersonService;
@@ -26,18 +26,18 @@ public class PersonServiceImpl implements PersonService {
     var entity = personRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Person not found"));
 
-    return DozerMapper.parseObject(entity, PersonVO.class);
+    return ModelMapperUtil.parseObject(entity, PersonVO.class);
   }
 
   public List<PersonVO> findAll() {
     logger.info("Finding all people");
-    return DozerMapper.parseListObjects(personRepository.findAll(), PersonVO.class);
+    return ModelMapperUtil.parseListObjects(personRepository.findAll(), PersonVO.class);
   }
 
   public PersonVO create(PersonVO personVO) {
     logger.info("Creating a new person");
-    var entity = DozerMapper.parseObject(personVO, Person.class);
-    return DozerMapper.parseObject(personRepository.save(entity), PersonVO.class);
+    var entity = ModelMapperUtil.parseObject(personVO, Person.class);
+    return ModelMapperUtil.parseObject(personRepository.save(entity), PersonVO.class);
   }
 
   public PersonVO update(PersonVO personVO) {
@@ -50,7 +50,7 @@ public class PersonServiceImpl implements PersonService {
     entity.setAddress(personVO.getAddress());
     entity.setGender(personVO.getGender());
 
-    return DozerMapper.parseObject(personRepository.save(entity), PersonVO.class);
+    return ModelMapperUtil.parseObject(personRepository.save(entity), PersonVO.class);
   }
 
   public void delete(Long id) {
