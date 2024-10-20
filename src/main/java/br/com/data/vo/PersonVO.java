@@ -1,4 +1,4 @@
-package br.com.data.vo.v1;
+package br.com.data.vo;
 
 import java.io.Serial;
 import java.io.Serializable;

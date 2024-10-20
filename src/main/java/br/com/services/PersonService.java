@@ -1,6 +1,6 @@
 package br.com.services;
 
-import br.com.data.vo.v1.PersonVO;
+import br.com.data.vo.PersonVO;
 import java.util.List;
 
 public interface PersonService {

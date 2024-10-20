@@ -2,7 +2,7 @@ package br.com.unittests.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import br.com.data.vo.v1.PersonVO;
+import br.com.data.vo.PersonVO;
 import br.com.mapper.ModelMapperUtil;
 import br.com.model.Person;
 import br.com.unittests.mapper.mocks.MockPerson;

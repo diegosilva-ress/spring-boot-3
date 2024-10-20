@@ -1,6 +1,6 @@
 package br.com.services.impl;
 
-import br.com.data.vo.v1.PersonVO;
+import br.com.data.vo.PersonVO;
 import br.com.exceptions.ResourceNotFoundException;
 import br.com.mapper.ModelMapperUtil;
 import br.com.model.Person;

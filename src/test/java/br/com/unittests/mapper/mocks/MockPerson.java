@@ -1,6 +1,6 @@
 package br.com.unittests.mapper.mocks;
 
-import br.com.data.vo.v1.PersonVO;
+import br.com.data.vo.PersonVO;
 import br.com.model.Person;
 import java.util.ArrayList;
 import java.util.List;

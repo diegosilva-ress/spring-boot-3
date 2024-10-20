@@ -1,6 +1,6 @@
 package br.com.controllers;
 
-import br.com.data.vo.v1.PersonVO;
+import br.com.data.vo.PersonVO;
 import br.com.services.PersonService;
 import java.util.List;
 import org.springframework.http.MediaType;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 public class PersonController {
 
   private final PersonService personService;
