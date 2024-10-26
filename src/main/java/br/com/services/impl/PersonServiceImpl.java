@@ -2,6 +2,7 @@ package br.com.services.impl;
 
 import br.com.controllers.PersonController;
 import br.com.data.vo.PersonVO;
+import br.com.exceptions.RequiredObjectIsNullException;
 import br.com.exceptions.ResourceNotFoundException;
 import br.com.mapper.ModelMapperUtil;
 import br.com.model.Person;
@@ -47,6 +48,9 @@ public class PersonServiceImpl implements PersonService {
   }
 
   public PersonVO create(PersonVO personVO) {
+    if(personVO == null) {
+      throw new RequiredObjectIsNullException();
+    }
     logger.info("Creating a new person");
     var entity = ModelMapperUtil.parseObject(personVO, Person.class);
     var vo = ModelMapperUtil.parseObject(personRepository.save(entity), PersonVO.class);
@@ -58,6 +62,9 @@ public class PersonServiceImpl implements PersonService {
   }
 
   public PersonVO update(PersonVO personVO) {
+    if(personVO == null) {
+      throw new RequiredObjectIsNullException();
+    }
     logger.info("Updating a new person");
     var entity = personRepository.findById(personVO.getKey())
         .orElseThrow(() -> new ResourceNotFoundException("Person not found"));

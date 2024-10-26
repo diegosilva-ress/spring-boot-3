@@ -1,16 +1,20 @@
 package br.com.unittests.mockito.services;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import br.com.data.vo.PersonVO;
+import br.com.exceptions.RequiredObjectIsNullException;
 import br.com.model.Person;
 import br.com.repository.PersonRepository;
 import br.com.services.impl.PersonServiceImpl;
 import br.com.unittests.mapper.mocks.MockPerson;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +24,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
 class PersonServiceImplTest {
 
@@ -54,6 +57,14 @@ class PersonServiceImplTest {
 
   @Test
   void findAll() {
+    List<Person> list = input.mockEntityList();
+
+    when(repository.findAll()).thenReturn(list);
+
+    var personVOList = service.findAll();
+
+    assertNotNull(personVOList);
+    assertEquals(14, personVOList.size());
   }
 
   @Test
@@ -104,5 +115,21 @@ class PersonServiceImplTest {
     when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
     assertDoesNotThrow(() -> service.delete(1L));
+  }
+
+  @Test
+  void createWithNullPerson() {
+    Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> service.create(null));
+    String expectedMessage = "It's not allowed to persist a null object!";
+    String actualMessage = exception.getMessage();
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void updateWithNullPerson() {
+    Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> service.update(null));
+    String expectedMessage = "It's not allowed to persist a null object!";
+    String actualMessage = exception.getMessage();
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 }
