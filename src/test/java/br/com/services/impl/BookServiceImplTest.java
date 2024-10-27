@@ -1,4 +1,4 @@
-package br.com.unittests.mockito.services;
+package br.com.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,41 +8,39 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import br.com.data.vo.PersonVO;
+import br.com.data.vo.BookVO;
 import br.com.exceptions.RequiredObjectIsNullException;
-import br.com.model.Person;
-import br.com.repository.PersonRepository;
-import br.com.services.impl.PersonServiceImpl;
-import br.com.unittests.mapper.mocks.MockPerson;
+import br.com.model.Book;
+import br.com.repository.BookRepository;
+import br.com.unittests.mapper.mocks.MockBook;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class PersonServiceImplTest {
+class BookServiceImplTest {
 
-  MockPerson input;
+  MockBook input;
 
   @InjectMocks
-  PersonServiceImpl service;
+  BookServiceImpl service;
 
   @Mock
-  PersonRepository repository;
+  BookRepository repository;
 
   @BeforeEach
   void setUp() {
-    input = new MockPerson();
+    input = new MockBook();
   }
 
   @Test
   void findById() {
-    Person entity = input.mockEntity(1);
+    Book entity = input.mockEntity(1);
     entity.setId(1L);
 
     when(repository.findById(1L)).thenReturn(Optional.of(entity));
@@ -52,64 +50,64 @@ class PersonServiceImplTest {
     assertNotNull(result);
     assertNotNull(result.getKey());
     assertNotNull(result.getLinks());
-    assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
+    assertTrue(result.toString().contains("links: [</api/books/v1/1>;rel=\"self\"]"));
   }
 
   @Test
   void findAll() {
-    List<Person> list = input.mockEntityList();
+    List<Book> list = input.mockEntityList();
 
     when(repository.findAll()).thenReturn(list);
 
-    var personVOList = service.findAll();
+    var bookVOList = service.findAll();
 
-    assertNotNull(personVOList);
-    assertEquals(14, personVOList.size());
+    assertNotNull(bookVOList);
+    assertEquals(14, bookVOList.size());
   }
 
   @Test
   void create() {
-    Person persisted = input.mockEntity(1);
+    Book persisted = input.mockEntity(1);
     persisted.setId(1L);
 
-    PersonVO vo = input.mockVO(1);
+    BookVO vo = input.mockVO(1);
     vo.setKey(1L);
 
-    when(repository.save(any(Person.class))).thenReturn(persisted);
+    when(repository.save(any(Book.class))).thenReturn(persisted);
 
     var result = service.create(vo);
 
     assertNotNull(result);
     assertNotNull(result.getKey());
     assertNotNull(result.getLinks());
-    assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
+    assertTrue(result.toString().contains("links: [</api/books/v1/1>;rel=\"self\"]"));
   }
 
   @Test
   void update() {
-    Person entity = input.mockEntity(1);
+    Book entity = input.mockEntity(1);
     entity.setId(1L);
 
-    Person persisted = input.mockEntity(1);
+    Book persisted = input.mockEntity(1);
     persisted.setId(1L);
 
-    PersonVO vo = input.mockVO(1);
+    BookVO vo = input.mockVO(1);
     vo.setKey(1L);
 
     when(repository.findById(1L)).thenReturn(Optional.of(entity));
-    when(repository.save(any(Person.class))).thenReturn(persisted);
+    when(repository.save(any(Book.class))).thenReturn(persisted);
 
     var result = service.update(vo);
 
     assertNotNull(result);
     assertNotNull(result.getKey());
     assertNotNull(result.getLinks());
-    assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
+    assertTrue(result.toString().contains("links: [</api/books/v1/1>;rel=\"self\"]"));
   }
 
   @Test
   void delete() {
-    Person entity = input.mockEntity(1);
+    Book entity = input.mockEntity(1);
     entity.setId(1L);
 
     when(repository.findById(1L)).thenReturn(Optional.of(entity));
@@ -118,7 +116,7 @@ class PersonServiceImplTest {
   }
 
   @Test
-  void createWithNullPerson() {
+  void createWithNullBook() {
     Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> service.create(null));
     String expectedMessage = "It's not allowed to persist a null object!";
     String actualMessage = exception.getMessage();
@@ -126,7 +124,7 @@ class PersonServiceImplTest {
   }
 
   @Test
-  void updateWithNullPerson() {
+  void updateWithNullBook() {
     Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> service.update(null));
     String expectedMessage = "It's not allowed to persist a null object!";
     String actualMessage = exception.getMessage();
