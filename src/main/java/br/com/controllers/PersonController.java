@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +32,7 @@ public class PersonController {
     this.personService = personService;
   }
 
+  @CrossOrigin(origins = "http://localhost:8080")
   @GetMapping(value = "/{id}",
       produces = {MediaType.APPLICATION_JSON_VALUE,
           MediaType.APPLICATION_XML_VALUE})
@@ -65,6 +66,7 @@ public class PersonController {
     return this.personService.findAll();
   }
 
+  @CrossOrigin(origins = {"http://localhost:8080"})
   @PostMapping(
       produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
