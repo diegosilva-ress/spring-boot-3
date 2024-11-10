@@ -1,5 +1,6 @@
 package br.com.data.vo.security;
 
+import jakarta.validation.constraints.NotEmpty;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,7 +10,10 @@ public class AccountCredentialsVO implements Serializable {
   @Serial
   private static final long serialVersionUID = 3773321636431128143L;
 
+  @NotEmpty
   private String username;
+
+  @NotEmpty
   private String password;
 
   public AccountCredentialsVO(String username, String password) {
