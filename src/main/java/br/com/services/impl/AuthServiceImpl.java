@@ -34,7 +34,8 @@ public class AuthServiceImpl implements AuthService {
       var username = data.getUsername();
       var password = data.getPassword();
 
-      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+      authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(username, password));
 
       var user = userRepository.findByUsername(username);
 
@@ -49,6 +50,20 @@ public class AuthServiceImpl implements AuthService {
     } catch (Exception e) {
       throw new BadCredentialsException("Invalid username/password suplied!");
     }
+  }
+
+  @Override
+  public ResponseEntity refreshToken(String username, String refreshToken) {
+    var user = userRepository.findByUsername(username);
+
+    var tokenResponse = new TokenVO();
+    if (user != null) {
+      tokenResponse = tokenProvider.refreshToken(refreshToken);
+    } else {
+      throw new UsernameNotFoundException("Username " + username + " not found!");
+    }
+
+    return ResponseEntity.ok(tokenResponse);
   }
 
 }

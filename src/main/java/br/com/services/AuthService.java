@@ -7,4 +7,6 @@ public interface AuthService {
 
   ResponseEntity signin(AccountCredentialsVO data);
 
+  ResponseEntity refreshToken(String username, String refreshToken);
+
 }
