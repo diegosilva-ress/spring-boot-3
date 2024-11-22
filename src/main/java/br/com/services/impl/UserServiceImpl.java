@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     logger.info("Finding one user by name " + username + "!");
     var user = userRepository.findByUsername(username);
 
-    if(user == null) {
+    if(user != null) {
       return user;
     } else {
       throw new UsernameNotFoundException("Username " + username + " not found!");
