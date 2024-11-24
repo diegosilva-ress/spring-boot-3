@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -112,6 +113,24 @@ public class PersonController {
   public ResponseEntity<?> delete(@PathVariable("id") Long id) {
     this.personService.delete(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @PatchMapping(value = "/{id}",
+      produces = {MediaType.APPLICATION_JSON_VALUE,
+          MediaType.APPLICATION_XML_VALUE})
+  @Operation(summary = "Disable a specific person by id", description = "Disable a specific person by id",
+      tags = {"People"}, responses = {
+      @ApiResponse(description = "Success", responseCode = "200", content = {
+          @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PersonVO.class))
+      }),
+      @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+      @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+      @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+      @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+      @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+  })
+  public PersonVO disablePerson(@PathVariable("id") Long id) {
+    return this.personService.disablePerson(id);
   }
 
 }

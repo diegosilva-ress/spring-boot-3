@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -89,6 +90,24 @@ public class PersonServiceImpl implements PersonService {
         .orElseThrow(() -> new ResourceNotFoundException("Person not found"));
 
     personRepository.delete(entity);
+  }
+
+  @Override
+  @Transactional
+  public PersonVO disablePerson(Long id) {
+    logger.info("Disabling one person");
+
+    personRepository.disablePerson(id);
+
+    var entity = personRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Person not found"));
+
+    var personVO = ModelMapperUtil.parseObject(entity, PersonVO.class);
+    personVO.add(
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PersonController.class).findById(id))
+            .withSelfRel());
+
+    return personVO;
   }
 
 }
