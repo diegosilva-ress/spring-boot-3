@@ -8,8 +8,9 @@ import br.com.mapper.ModelMapperUtil;
 import br.com.model.Person;
 import br.com.repository.PersonRepository;
 import br.com.services.PersonService;
-import java.util.List;
 import java.util.logging.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,18 +39,21 @@ public class PersonServiceImpl implements PersonService {
     return personVO;
   }
 
-  public List<PersonVO> findAll() {
+  public Page<PersonVO> findAll(Pageable pageable) {
     logger.info("Finding all people");
-    var people = ModelMapperUtil.parseListObjects(personRepository.findAll(), PersonVO.class);
 
-    people.forEach(p -> p.add(WebMvcLinkBuilder.linkTo(
+    var personPage = personRepository.findAll(pageable);
+
+    var personVoPage = personPage.map(p -> ModelMapperUtil.parseObject(p, PersonVO.class));
+
+    personVoPage.map(p -> p.add(WebMvcLinkBuilder.linkTo(
         WebMvcLinkBuilder.methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
 
-    return people;
+    return personVoPage;
   }
 
   public PersonVO create(PersonVO personVO) {
-    if(personVO == null) {
+    if (personVO == null) {
       throw new RequiredObjectIsNullException();
     }
     logger.info("Creating a new person");
@@ -63,7 +67,7 @@ public class PersonServiceImpl implements PersonService {
   }
 
   public PersonVO update(PersonVO personVO) {
-    if(personVO == null) {
+    if (personVO == null) {
       throw new RequiredObjectIsNullException();
     }
     logger.info("Updating a new person");

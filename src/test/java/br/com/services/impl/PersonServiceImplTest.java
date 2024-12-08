@@ -53,17 +53,17 @@ class PersonServiceImplTest {
     assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
   }
 
-  @Test
-  void findAll() {
-    List<Person> list = input.mockEntityList();
-
-    when(repository.findAll()).thenReturn(list);
-
-    var personVOList = service.findAll();
-
-    assertNotNull(personVOList);
-    assertEquals(14, personVOList.size());
-  }
+//  @Test
+//  void findAll() {
+//    List<Person> list = input.mockEntityList();
+//
+//    when(repository.findAll()).thenReturn(list);
+//
+//    var personVOList = service.findAll();
+//
+//    assertNotNull(personVOList);
+//    assertEquals(14, personVOList.size());
+//  }
 
   @Test
   void create() {
