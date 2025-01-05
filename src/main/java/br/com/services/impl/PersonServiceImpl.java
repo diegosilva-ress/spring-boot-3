@@ -9,8 +9,11 @@ import br.com.model.Person;
 import br.com.repository.PersonRepository;
 import br.com.services.PersonService;
 import java.util.logging.Logger;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +23,13 @@ public class PersonServiceImpl implements PersonService {
 
   private final PersonRepository personRepository;
 
+  private final PagedResourcesAssembler<PersonVO> assembler;
+
   private final Logger logger = Logger.getLogger(PersonServiceImpl.class.getName());
 
-  public PersonServiceImpl(PersonRepository personRepository) {
+  public PersonServiceImpl(PersonRepository personRepository, PagedResourcesAssembler<PersonVO> assembler) {
     this.personRepository = personRepository;
+    this.assembler = assembler;
   }
 
   public PersonVO findById(Long id) {
@@ -39,7 +45,7 @@ public class PersonServiceImpl implements PersonService {
     return personVO;
   }
 
-  public Page<PersonVO> findAll(Pageable pageable) {
+  public PagedModel<EntityModel<PersonVO>> findAll(Pageable pageable) {
     logger.info("Finding all people");
 
     var personPage = personRepository.findAll(pageable);
@@ -49,7 +55,10 @@ public class PersonServiceImpl implements PersonService {
     personVoPage.map(p -> p.add(WebMvcLinkBuilder.linkTo(
         WebMvcLinkBuilder.methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
 
-    return personVoPage;
+    Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PersonController.class)
+        .findAll(pageable.getPageNumber(), pageable.getPageSize(), "ASC")).withSelfRel();
+
+    return assembler.toModel(personVoPage, link);
   }
 
   public PersonVO create(PersonVO personVO) {

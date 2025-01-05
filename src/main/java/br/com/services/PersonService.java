@@ -1,14 +1,15 @@
 package br.com.services;
 
 import br.com.data.vo.PersonVO;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 
 public interface PersonService {
 
   PersonVO findById(Long id);
 
-  Page<PersonVO> findAll(Pageable pageable);
+  PagedModel<EntityModel<PersonVO>> findAll(Pageable pageable);
 
   PersonVO create(PersonVO personVO);
 
